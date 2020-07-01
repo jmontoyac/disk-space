@@ -20,21 +20,6 @@ def getDirectorySize(dir):
     return size
 
 
-# shutil library disk info
-# def getDiskInfo():
-#    total, used, free = shutil.disk_usage("/images")
-#    percent_used = (used * 100 / total)
-#
-#    body_bucket = {
-#        "total": str(total // (2 ** 30)),
-#        "used": str(used // (2 ** 30)),
-#        "free": str(free // (2 ** 30)),
-#        "percent_used": str(round(percent_used, 2)),
-#        "timestamp": str(time.time()),
-#        "message": "NULL"
-#    }
-#    return body_bucket
-
 # psutil library disk info
 def getDiskInfo():
     diskInfo = psutil.disk_usage('/')
