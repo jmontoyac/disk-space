@@ -1,0 +1,52 @@
+version: '2.3'
+
+volumes:
+  images:
+    driver: local
+    driver_opts:
+      type: nfs
+      device: ":/srv/nfs/images" # src dst
+      o: "addr=localhost,vers=3,nolock,soft,rw"
+
+services:
+
+  poc-storage:
+    container_name: poc-storage
+    hostname: poc-storage
+    build: ./
+    restart: always
+    labels:
+      - type=collector
+    logging:
+          options:
+            max-size: 50m
+    mem_reservation: 256m
+    ports:
+     - 8900:80
+    volumes:
+      - images:/images
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+      - "15671:15671"
+      - "15672:15672"
+      - "25672:25672"
+    logging:
+      options:
+        max-size: 50m
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "node_health_check"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+    labels:
+      - type=middleware
+
