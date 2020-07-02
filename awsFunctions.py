@@ -1,8 +1,8 @@
-mport boto3
+import boto3
 from botocore.exceptions import NoCredentialsError
 
-ACCESS_KEY = 'XXXXXXXXXXXXXXXXXXXXXXX'
-SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+ACCESS_KEY = ''
+SECRET_KEY = ''
 
 
 def upload_to_aws(local_file, bucket, s3_file):
@@ -21,4 +21,8 @@ def upload_to_aws(local_file, bucket, s3_file):
         return False
 
 
-uploaded = upload_to_aws('local_file', 'bucket_name', 's3_file_name')
+localFile = '/images/gotIt.jpg'
+s3File = 'imagesTest/gotIt.jpg'
+bucketName = 'voti-public'
+
+#uploaded = upload_to_aws(localFile, bucketName, s3File)

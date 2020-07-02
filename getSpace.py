@@ -4,6 +4,7 @@ import psutil
 import json
 import os
 import time
+import awsFunctions as S3
 
 warningLimit = 80.0  # Usage percentage to warn
 
@@ -34,6 +35,7 @@ def getDiskInfo():
         "timestamp": str(time.time()),
         "message": "NULL"
     }
+
     return body_bucket
 
 
@@ -52,9 +54,10 @@ body = getDiskInfo()
 if float(body["percent_used"]) >= warningLimit:
     print("Disk limit exceeded")
     body["message"] = "Size Limit Exceeded"
+    S3.upload_to_aws('/images/*.jpg', 'imagesTest/*.jpg', 'voti-public')
 else:
     print("Disk limit Not yet exceeded")
     body["message"] = "Size Limit Ok"
 
 # Send bucket data to Rabbit
-publish_to_rabbit("", body, "rabbitmq")
+#publish_to_rabbit("", body, "rabbitmq")

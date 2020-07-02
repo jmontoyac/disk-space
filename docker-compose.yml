@@ -1,4 +1,4 @@
-version: '2.3'
+version: "2.3"
 
 volumes:
   images:
@@ -9,20 +9,20 @@ volumes:
       o: "addr=localhost,vers=3,nolock,soft,rw"
 
 services:
-
   poc-storage:
     container_name: poc-storage
     hostname: poc-storage
+    image: poc-storage
     build: ./
     restart: always
     labels:
       - type=collector
     logging:
-          options:
-            max-size: 50m
+      options:
+        max-size: 50m
     mem_reservation: 256m
     ports:
-     - 8900:80
+      - 8900:80
     volumes:
       - images:/images
 
@@ -49,4 +49,3 @@ services:
       start_period: 5s
     labels:
       - type=middleware
-
