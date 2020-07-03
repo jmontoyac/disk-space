@@ -1,18 +1,10 @@
 version: "2.3"
 
-volumes:
-  images:
-    driver: local
-    driver_opts:
-      type: nfs
-      device: ":/srv/nfs/images" # src dst
-      o: "addr=localhost,vers=3,nolock,soft,rw"
-
 services:
-  poc-storage:
-    container_name: poc-storage
-    hostname: poc-storage
-    image: poc-storage
+  bucket-controller:
+    container_name: bucket-controller
+    hostname: bucket-controller
+    image: bucket-controller
     build: ./
     restart: always
     labels:
@@ -25,6 +17,7 @@ services:
       - 8900:80
     volumes:
       - images:/images
+      - config_data:/config
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -49,3 +42,13 @@ services:
       start_period: 5s
     labels:
       - type=middleware
+
+volumes:
+  images:
+    driver: local
+    driver_opts:
+      type: nfs
+      device: ":/srv/nfs/images" # src dst
+      o: "addr=localhost,vers=3,nolock,soft,rw"
+
+  config_data:

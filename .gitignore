@@ -8,6 +8,8 @@ __pycache__/
 .aws/config
 .aws/credentials
 
+.vscode
+
 # Distribution / packaging
 .Python
 test*.py

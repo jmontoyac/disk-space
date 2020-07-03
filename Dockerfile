@@ -14,6 +14,9 @@ RUN pip install psutil==5.7.0
 RUN pip install pika==0.13.1
 RUN pip install boto3
 
+# Config related stuff
+COPY config.ini /config/config.ini
+
 COPY *.py /scripts/
 
 CMD cron && tail -f /var/log/cron.log
