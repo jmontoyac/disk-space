@@ -1,10 +1,8 @@
-#import shutil
-import pika
 import psutil
-import json
 import os
 from datetime import datetime
-import awsFunctions as S3
+import rabbitFunctions as rabbit
+import deleteFiles
 
 # TODO Read value form voti.conf during installation through Ansible role
 # warningLimit = ${BUCKET_WARNING_LIMIT}
@@ -46,22 +44,15 @@ def getDiskInfo():
     return body_bucket
 
 
-def publish_to_rabbit(queue, body, host):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host))
-    channel = connection.channel()
-    channel.queue_declare(queue='disk_info')
-    channel.basic_publish(exchange="",
-                          routing_key=queue,
-                          body=json.dumps(body, indent=4))
-    connection.close()
-
-
+# Main
 body = getDiskInfo()
 
 if float(body["percentage_used"]) >= warningLimit:
     print("Disk limit exceeded")
 else:
-    print("Disk limit Not yet exceeded")
+    print("Disk limit Not yet exceeded, time: " + str(datetime.now()))
 
 # Send bucket data to Rabbit
-publish_to_rabbit("disk_info", body, "rabbitmq")
+rabbit.publish_to_rabbit('disk_info', body, 'rabbitmq')
+
+deleteFiles.createTestData(500)

@@ -12,7 +12,8 @@ RUN apt install git -y
 # Python related stuff
 RUN pip install psutil==5.7.0
 RUN pip install pika==0.13.1
-RUN pip install boto3
+# Uncomment boto3 when AWS functions are needed
+#RUN pip install boto3
 
 # Config related stuff
 COPY config.ini /config/config.ini
