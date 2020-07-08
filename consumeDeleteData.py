@@ -23,3 +23,10 @@ channel.basic_consume(
 )
 
 channel.start_consuming()
+
+# Parse logic to delete files
+
+
+def parseFilesList(aBody):
+    for file in aBody:
+        print(':: File: ' + file['ID'])
