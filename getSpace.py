@@ -55,4 +55,4 @@ else:
 # Send bucket data to Rabbit
 rabbit.publish_to_rabbit('disk_info', body, 'rabbitmq')
 
-deleteFiles.createTestData(500)
+deleteFiles.createTestData(10)
