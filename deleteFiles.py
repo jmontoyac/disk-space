@@ -1,22 +1,10 @@
 #import rabbitFunctions as rabbit
 import os
-import logging
-import logging.handlers as handlers
+import insLogger
+import rabbitFunctions as rabbit
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%d-%m-%Y %H:%M:%S',
-                    filename='/var/log/bucket.log',
-                    filemode='w')
-
-
-logHandler = handlers.TimedRotatingFileHandler('/var/log/bucket.log',
-                                               when='midnight',
-                                               interval=1,
-                                               backupCount=3)
-
-logger = logging.getLogger('bucket')
-logger.addHandler(logHandler)
+logger = insLogger.logging.getLogger('bucketController')
+logger.addHandler(insLogger.logHandler)
 
 
 def createTestData(numberOfFiles):
@@ -40,14 +28,20 @@ def buildCommands():
 
 
 def deleteFiles(myFiles):
+    response = []
     for file in myFiles:
         try:
-            print('Removing: ' + file['pathfile'])
-            logger.debug('Removing: ' + file['pathfile'])
             # os.remove(file['pathfile'])
+            print('Deleting: ' + file['pathfile'] + ' SUCCESS')
+            logger.debug('Deleting: ' + file['pathfile'] + ' SUCCESS')
+            operationResult = {'id': file['id'], 'result': 'SUCCESS'}
         except Exception as e:
-            logger.debug('Error during file deletion: ' + str(e))
+            logger.error('Error during file deletion for ID: ' +
+                         file['id'] + ' ' + str(e))
             print('Error during file deletion: ' + str(e))
+            operationResult = {'id': file['id'], 'result': 'FAILED'}
+        response.append(operationResult)
+    rabbit.publish_to_rabbit('delete_result', response, 'rabbitmq')
 
 
 # Main
