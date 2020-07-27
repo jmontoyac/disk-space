@@ -13,12 +13,12 @@ RUN pip install pika==0.13.1
 # Uncomment boto3 when AWS functions are needed
 #RUN pip install boto3
 
-# Config related stuff
-COPY config.ini /config/config.ini
-
 COPY *.py /scripts/
 
 COPY supervisord.conf /etc/supervisord.conf
+
+# Config related stuff
+COPY config.ini /bucket_config/config.ini
 
 #CMD cron && tail -f /var/log/cron.log
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

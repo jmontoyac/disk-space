@@ -4,12 +4,13 @@ bucketsList = []
 bucketData = {}
 
 config = configparser.ConfigParser()
-config.read('config.ini')
-
+config.read('/bucket_config/config.ini')
+sections = config.sections()
 
 # Read configuration file and load data in list 'bucketData'
+
+
 def loadConfiguration():
-    sections = config.sections()
     i = 0
     try:
         for section in sections:
@@ -30,5 +31,20 @@ def loadConfiguration():
         print('Error in config file, section ' + section + ': ' + str(e))
 
 
+def getActiveBucket():
+    for section in sections:
+        if (config[section]['STATE'] == 'ACTIVE'):
+            print('Found active bucket  with ID: ' +
+                  str(config[section]['ID']))
+            bucketData = {
+                'ID': config[section]['ID'],
+                'TYPE': config[section]['TYPE'],
+                'STATE': config[section]['STATE'],
+                'PATH': config[section]['PATH']
+            }
+            return bucketData
+
+
 # Main
 loadConfiguration()
+getActiveBucket()

@@ -12,19 +12,8 @@ def createTestData(numberOfFiles):
     for i in range(numberOfFiles):
         dict = {'id': str(i), 'pathfile': '/images/IMG' + str(i) + '.jpg'}
         lista.append(dict)
-    #rabbit.publish_to_rabbit('delete_list', lista, 'rabbitmq')
-    return lista
-
-
-def buildCommands():
-    myFiles = createTestData(10)
-    deleteList = []
-    for dict in myFiles:
-        deleteFile = {
-            'id': dict['id'], 'pathfile': dict['pathfile'], 'command': 'rm ' + dict['pathfile']}
-        deleteList.append(deleteFile)
-        print(deleteFile['id'] + ':' +
-              deleteFile['pathfile'] + deleteFile['command'])
+    rabbit.publish_to_rabbit('delete_list', lista, 'rabbitmq')
+    # return lista
 
 
 def deleteFiles(myFiles):
@@ -46,5 +35,5 @@ def deleteFiles(myFiles):
 
 # Main
 # buildCommands()
-f = createTestData(5)
-deleteFiles(f)
+# f = createTestData(5)
+# deleteFiles(f)

@@ -1,11 +1,12 @@
 import pika
+import deleteFiles
 
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(host='rabbitmq'))
 channel = connection.channel()
 channel.exchange_declare(exchange='files_list', exchange_type='fanout')
 
-#result = channel.queue_declare(queue='delete_list', exclusive=True)
+result = channel.queue_declare(queue='delete_list', exclusive=False)
 #queue_name = result.method.queue
 queue_name = 'delete_list'
 
@@ -15,7 +16,10 @@ print('Waiting for list of files to delete')
 
 
 def callback(ch, method, properties, body):
-    print("[x] %r" % body)
+    deleteFiles.deleteFiles(body)
+    #print("[x] %r" % body)
+
+# Send list of files for deletion
 
 
 channel.basic_consume(
@@ -23,10 +27,3 @@ channel.basic_consume(
 )
 
 channel.start_consuming()
-
-# Parse logic to delete files
-
-
-def parseFilesList(aBody):
-    for file in aBody:
-        print(':: File: ' + file['ID'])
