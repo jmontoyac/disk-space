@@ -45,6 +45,32 @@ def getActiveBucket():
             return bucketData
 
 
+def setFullBucket(aBucketId):
+    config.set(aBucketId, 'STATE', 'FULL')
+    print('Bucket: ' + aBucketId + ' set to FULL state.')
+
+
+def setActiveBucket(aBucketId):
+    config.set(aBucketId, 'STATE', 'ACTIVE')
+    print('Bucket: ' + aBucketId + ' set to ACTIVE state.')
+
+
+def getAvailableBuckets():
+    bucketDataList = []
+    for section in sections:
+        if (config[section]['STATE'] == 'AVAILABLE'):
+            print('Found available bucket  with ID: ' +
+                  str(config[section]['ID']))
+            bucketData = {
+                'ID': config[section]['ID'],
+                'TYPE': config[section]['TYPE'],
+                'STATE': config[section]['STATE'],
+                'PATH': config[section]['PATH']
+            }
+            bucketDataList.append(bucketData)
+    return bucketDataList
+
+
 # Main
 loadConfiguration()
 getActiveBucket()
